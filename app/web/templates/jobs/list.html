@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{% if q or location %}Search results · {% endif %}JobBoard{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Find your next role</h1>
+  <form class="search" method="get" action="/" role="search">
+    <label class="visually-hidden" for="q">Keywords</label>
+    <input id="q" name="q" value="{{ q }}" placeholder="Title, company or keyword" maxlength="100">
+    <label class="visually-hidden" for="location">Location</label>
+    <input id="location" name="location" value="{{ location }}" placeholder="Location" maxlength="100">
+    <button type="submit" class="button">Search</button>
+  </form>
+</section>
+
+<p class="muted result-count">
+  {{ result.total }} {{ "job" if result.total == 1 else "jobs" }}
+  {% if q or location %} matching your search · <a href="/">clear</a>{% endif %}
+</p>
+
+{% if result.items %}
+  <ul class="job-list">
+    {% for job in result.items %}
+      <li>
+        <a class="job-card" href="/jobs/{{ job.id }}">
+          <span class="logo" aria-hidden="true">{{ job.company[:1] | upper }}</span>
+          <span class="job-main">
+            <strong class="job-title">{{ job.title }}</strong>
+            <span class="muted">{{ job.company }} · {{ job.location }}</span>
+          </span>
+          <time class="muted" datetime="{{ job.date_posted.isoformat() }}">{{ job.date_posted.strftime("%d %b %Y") }}</time>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% if result.pages > 1 %}
+    <nav class="pager" aria-label="Pagination">
+      {% if result.page > 1 %}<a class="button secondary" href="{{ page_url(result.page - 1) }}">← Newer</a>{% else %}<span></span>{% endif %}
+      <span class="muted">Page {{ result.page }} of {{ result.pages }}</span>
+      {% if result.page < result.pages %}<a class="button secondary" href="{{ page_url(result.page + 1) }}">Older →</a>{% else %}<span></span>{% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="empty card">
+    <p>No jobs found{% if q or location %} for this search{% endif %}.</p>
+    <a href="/post-job" class="button">Post the first one</a>
+  </div>
+{% endif %}
+{% endblock %}

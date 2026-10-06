@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}JobBoard{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+  <link rel="icon" href="{{ url_for('static', path='favicon.svg') }}" type="image/svg+xml">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand"><span class="brand-mark" aria-hidden="true">◼</span> JobBoard</a>
+      <nav aria-label="Main">
+        <a href="/post-job" class="button small">Post a job</a>
+        {% if user %}
+          <a href="/my-jobs">My jobs</a>
+          <form method="post" action="/logout" class="inline">
+            <button type="submit" class="link">Log out <span class="muted">({{ user.username }})</span></button>
+          </form>
+        {% else %}
+          <a href="/login">Log in</a>
+          <a href="/register">Sign up</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% if flash %}<p class="flash" role="status">{{ flash }}</p>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container footer muted">
+    JobBoard · <a href="/docs">REST API docs</a>
+  </footer>
+</body>
+</html>

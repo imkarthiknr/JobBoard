@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}My jobs · JobBoard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>My jobs</h1>
+  <a href="/post-job" class="button">Post a job</a>
+</div>
+{% if jobs %}
+  <ul class="job-list">
+    {% for job in jobs %}
+      <li>
+        <a class="job-card" href="/jobs/{{ job.id }}">
+          <span class="logo" aria-hidden="true">{{ job.company[:1] | upper }}</span>
+          <span class="job-main">
+            <strong class="job-title">{{ job.title }}</strong>
+            <span class="muted">{{ job.company }} · {{ job.location }}</span>
+          </span>
+          {% if job.is_active %}<span class="badge open">Open</span>{% else %}<span class="badge">Closed</span>{% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="empty card"><p>You haven't posted any jobs yet.</p></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} at {{ job.company }} · JobBoard{% endblock %}
+{% block content %}
+<a href="/" class="back">← All jobs</a>
+<article class="card job-detail">
+  <header>
+    <span class="logo large" aria-hidden="true">{{ job.company[:1] | upper }}</span>
+    <div>
+      <h1>{{ job.title }}</h1>
+      <p class="muted">
+        {% if job.company_url %}<a href="{{ job.company_url }}" rel="noopener nofollow" target="_blank">{{ job.company }}</a>{% else %}{{ job.company }}{% endif %}
+        · {{ job.location }} · Posted {{ job.date_posted.strftime("%d %b %Y") }}
+      </p>
+      {% if not job.is_active %}<p class="badge">Closed</p>{% endif %}
+    </div>
+  </header>
+  <div class="description">{{ job.description }}</div>
+
+  {% if can_edit %}
+    <footer class="owner-actions">
+      <form method="post" action="/jobs/{{ job.id }}/toggle" class="inline">
+        <button type="submit" class="button secondary">{{ "Close posting" if job.is_active else "Reopen posting" }}</button>
+      </form>
+      <form method="post" action="/jobs/{{ job.id }}/delete" class="inline"
+            onsubmit="return confirm('Delete this job permanently?');">
+        <button type="submit" class="button danger">Delete</button>
+      </form>
+    </footer>
+  {% endif %}
+</article>
+{% endblock %}

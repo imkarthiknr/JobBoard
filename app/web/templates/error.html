@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ status }} · JobBoard{% endblock %}
+{% block content %}
+<div class="card empty">
+  <h1>{% if status == 404 %}Page not found{% elif status == 403 %}Not allowed{% else %}Something went wrong{% endif %}</h1>
+  <p class="muted">{% if status == 404 %}The job may have been removed or closed.{% elif status == 403 %}You can only manage your own job postings.{% else %}Error {{ status }}.{% endif %}</p>
+  <a href="/" class="button">Back to jobs</a>
+</div>
+{% endblock %}

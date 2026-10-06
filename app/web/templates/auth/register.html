@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Sign up · JobBoard{% endblock %}
+{% block content %}
+<form class="card form narrow" method="post" action="/register" novalidate>
+  <h1>Create an account</h1>
+  <label for="username">Username</label>
+  <input id="username" name="username" value="{{ values.get('username', '') }}" autocomplete="username" required
+    {% if errors.username %}aria-invalid="true"{% endif %}>
+  {% if errors.username %}<p class="field-error">{{ errors.username }}</p>{% else %}<p class="hint">Letters, numbers, dots, dashes and underscores.</p>{% endif %}
+  <label for="email">Email</label>
+  <input id="email" name="email" type="email" value="{{ values.get('email', '') }}" autocomplete="email" required
+    {% if errors.email %}aria-invalid="true"{% endif %}>
+  {% if errors.email %}<p class="field-error">{{ errors.email }}</p>{% endif %}
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" autocomplete="new-password" required
+    {% if errors.password %}aria-invalid="true"{% endif %}>
+  {% if errors.password %}<p class="field-error">{{ errors.password }}</p>{% else %}<p class="hint">At least 8 characters, with a letter and a number.</p>{% endif %}
+  <div class="actions"><button type="submit" class="button">Sign up</button></div>
+  <p class="muted">Already have an account? <a href="/login">Log in</a></p>
+</form>
+{% endblock %}
